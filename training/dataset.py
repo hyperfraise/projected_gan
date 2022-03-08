@@ -113,6 +113,7 @@ class Dataset(torch.utils.data.Dataset):
         try:
             assert list(image.shape) == self.image_shape
         except:
+            print(image.shape, idx, self._raw_idx[idx], self._image_fnames[self._raw_idx[idx]])
             return None, None
         assert image.dtype == np.uint8
         if self._xflip[idx]:
