@@ -245,7 +245,7 @@ class ImageFolderDataset(Dataset):
 
     def _load_raw_image(self, raw_idx):
         fname = self._image_fnames[raw_idx]
-        image = cv2.imread(fname)
+        image = cv2.imread("data/"+fname)
         if image.ndim == 2:
             image = image[:, :, np.newaxis]  # HW => HWC
         image = cv2.resize(image, (256, 256))
