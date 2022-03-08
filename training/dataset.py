@@ -113,7 +113,8 @@ class Dataset(torch.utils.data.Dataset):
         try:
             assert list(image.shape) == self.image_shape
         except:
-            print(image.shape, idx, self._raw_idx[idx], self._image_fnames[self._raw_idx[idx]])
+            print(image.shape, idx,
+                  self._raw_idx[idx], self._image_fnames[self._raw_idx[idx]])
             return None, None
         assert image.dtype == np.uint8
         if self._xflip[idx]:
@@ -244,11 +245,7 @@ class ImageFolderDataset(Dataset):
 
     def _load_raw_image(self, raw_idx):
         fname = self._image_fnames[raw_idx]
-        with self._open_file(fname) as f:
-            if pyspng is not None and self._file_ext(fname) == '.png':
-                image = pyspng.load(f.read())
-            else:
-                image = np.array(PIL.Image.open(f))
+        image = cv2.imread(fname)
         if image.ndim == 2:
             image = image[:, :, np.newaxis]  # HW => HWC
         image = cv2.resize(image, (256, 256))
