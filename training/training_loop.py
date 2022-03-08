@@ -376,7 +376,7 @@ def training_loop(
                     for param, grad in zip(params, grads):
                         param.grad = grad.reshape(param.shape)
                 phase.opt.step()
-                
+
             # Phase done.
             if phase.end_event is not None:
                 phase.end_event.record(torch.cuda.current_stream(device))
@@ -457,7 +457,7 @@ def training_loop(
                 run_dir, f'fakes{cur_nimg//1000:06d}.png'), drange=[-1, 1], grid_size=grid_size)
 
             with torch.no_grad():
-                step = 1 / 64
+                step = 1 / 48
                 vis_gen_z = torch.stack(
                     [
                         fixed_gen_z[0] * (1 - t) + fixed_gen_z[1] * t
