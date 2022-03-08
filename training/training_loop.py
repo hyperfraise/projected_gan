@@ -28,7 +28,7 @@ from torch_utils import misc
 from torch_utils import training_stats
 from torch_utils.ops import conv2d_gradfix
 from torch_utils.ops import grid_sample_gradfix
-
+import cv2
 import legacy
 from metrics import metric_main
 
@@ -269,7 +269,14 @@ def training_loop(
         save_image_grid(images, os.path.join(run_dir, 'reals.png'),
                         drange=[0, 255], grid_size=grid_size)
 
-        real_images_batch = torch.from_numpy(images[:2]).cuda()*2./255. - 1
+        base = "data/dummy/"
+        real_files = os.listdir(base)
+        real_images = [cv2.resize(cv2.imread(os.path.join(
+            base, file)), (128, 128)) for file in real_files]
+        real_images_batch = torch.from_numpy(
+            np.array(real_images)).cuda()*2./255. - 1
+        real_images_batch = real_images_batch.transpose([0, 3, 1, 2])
+
         save_image_grid(real_images_batch.cpu(), os.path.join(
             run_dir, 'fixed_real.png'), drange=[-1, 1], grid_size=(2, 1))
         grid_z = torch.randn([labels.shape[0], G.z_dim],
